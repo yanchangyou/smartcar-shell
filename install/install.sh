@@ -53,8 +53,8 @@ mv ~/lircd.conf /etc/lirc/lircd.conf
 irw
 
 #install car
-git clone git://github.com/yanchangyou/smartcar
-cd smartcar/bin
+git clone git://github.com/yanchangyou/smartcar-shell
+cd smartcar-shell/bin
 chmod +x *.sh
 
 #start
