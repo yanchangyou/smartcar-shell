@@ -1,11 +1,9 @@
 
 #enable root
 sudo passwd root
-pi
-pi
 
+#use root
 su - root
-pi
 
 #config dns
 echo nameserver 114.114.114.114 > /etc/resolv.config
@@ -59,6 +57,3 @@ chmod +x *.sh
 
 #start
 ./start.sh
-
-
-
