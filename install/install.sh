@@ -1,59 +1,57 @@
 
-#enable root
-sudo passwd root
+echo config dns
+sudo bash -c "echo nameserver 114.114.114.114 > /etc/resolv.config"
 
-#use root
-su - root
+echo config apt source aliyun
+sudo bash -c "echo deb http://mirrors.aliyun.com/raspbian/raspbian/ wheezy main non-free contrib > /etc/apt/sources.list"
+sudo bash -c "echo deb-src http://mirrors.aliyun.com/raspbian/raspbian/ wheezy main non-free contrib >> /etc/apt/sources.list"
 
-#config dns
-echo nameserver 114.114.114.114 > /etc/resolv.config
+echo apt update
+sudo apt-get update
 
-#config apt source aliyun
-echo deb http://mirrors.aliyun.com/raspbian/raspbian/ wheezy main non-free contrib > /etc/apt/sources.list
-echo deb-src http://mirrors.aliyun.com/raspbian/raspbian/ wheezy main non-free contrib >> /etc/apt/sources.list
+echo all install to /opt directory
 
-#apt update
-apt-get update
-
-#all install to opt
+echo instal gpio wiringPi
 cd /opt
-
-#instal gpio wiringPi
-git clone git://git.drogon.net/wiringPi
+sudo rm -rf wiringPi
+sudo git clone git://git.drogon.net/wiringPi
 
 cd wiringPi
-./build
+sudo ./build
 
-#test gpio
+echo test gpio
 gpio -v
 
-#install lirc
-apt-get install lirc -y
+echo install lirc
+sudo apt-get install lirc -y
 
-#config gpio
-modprobe lirc_rpi gpio_in_pin=25 gpio_out_pin=2
+echo config gpio use pin 25
+sudo modprobe lirc_rpi gpio_in_pin=25 gpio_out_pin=2
 
-#test
-mode2 -d /dev/lirc0
+echo test
+echo sudo mode2 -d /dev/lirc0
 
-#config
-sed -i "4cLIRCD_ARGS=\"--uinput\"" /etc/lirc/hardware.conf
-sed -i "16cDRIVER=\"default\"" /etc/lirc/hardware.conf
-sed -i "18cDEVICE=\"/dev/lirc0\"" /etc/lirc/hardware.conf
+echo config
+sudo sed -i "4cLIRCD_ARGS=\"--uinput\"" /etc/lirc/hardware.conf
+sudo sed -i "16cDRIVER=\"default\"" /etc/lirc/hardware.conf
+sudo sed -i "18cDEVICE=\"/dev/lirc0\"" /etc/lirc/hardware.conf
 
-#record buttons
-/etc/init.d/lirc stop
-irrecord -n -d /dev/lirc0 ~/lircd.conf
-mv ~/lircd.conf /etc/lirc/lircd.conf
-/etc/init.d/lirc start
+echo record buttons
+sudo /etc/init.d/lirc stop
+sudo rm ~/lircd.conf
+sudo irrecord -n -d /dev/lirc0 ~/lircd.conf
+sudo mv ~/lircd.conf /etc/lirc/lircd.conf
+sudo /etc/init.d/lirc start
 
-#test
-irw
+#echo test
+#echo irw
 
-#install car
-git clone git://github.com/yanchangyou/smartcar-shell
+echo install car
+cd /opt
+sudo rm -rf smartcar-shell
+sudo git clone git://github.com/yanchangyou/smartcar-shell
 cd smartcar-shell/bin
-chmod +x *.sh
+sudo chmod +x *.sh
 
-#start
+echo start smart car
 ./start.sh
